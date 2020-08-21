@@ -1,0 +1,93 @@
+---
+title: "ACLU Child Separations"
+output: html_notebook
+---
+
+```{r message=FALSE, warning=FALSE, error=TRUE}
+# load libraries
+
+library(dplyr)
+library(readr)
+```
+
+```{r error=TRUE}
+# load data
+aclu <- aclu_separation
+```
+
+```{r error=TRUE}
+# inspect data
+head(aclu)
+summary(aclu)
+
+```
+
+```{r error=TRUE}
+# select columns
+aclu <- aclu %>%
+  select(-addr)
+head(aclu)
+
+
+```
+
+```{r error=TRUE}
+# view columns
+colnames(aclu)
+```
+
+```{r error=TRUE}
+# rename columns
+aclu <- aclu %>%
+  rename(number_of_children = n, city = program_city, state = program_state, longitude = lon, latitude = lat)
+colnames(aclu)
+
+
+
+
+
+```
+
+```{r error=TRUE}
+# add column
+border_latitude <- 25.83
+aclu <- aclu %>%
+  mutate(lat_border_change = latitude - border_latitude)
+head(aclu)
+
+
+
+```
+
+```{r error=TRUE}
+# latitude change
+further_away <- aclu %>%
+  filter(lat_border_change > 15) %>%
+  arrange(desc(lat_border_change))
+further_away
+
+
+
+```
+
+```{r error=TRUE}
+# number of children
+ordered_by_children <- aclu %>%
+  arrange(desc(number_of_children))
+ordered_by_children
+
+
+```
+
+```{r error=TRUE}
+# state analysis
+chosen_state <- 'WA'
+chosen_state_filter <- aclu %>%
+  filter(state == chosen_state) %>%
+  arrange(desc(number_of_children))
+chosen_state_filter
+
+
+
+
+```
